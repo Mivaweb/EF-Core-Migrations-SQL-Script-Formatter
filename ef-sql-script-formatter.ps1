@@ -31,5 +31,15 @@ $sql = get-content $path -raw
 ## Replace DEV Database Name with the correct stage Database Name
 $sql = [regex]::replace($sql, "USE \[$devDb\]", "USE [$stageDb]", "ignorecase,singleline")
 
+## Escape single quote with another single quote script blocks
+$sbCreate = {param ($m) "BEGIN`nEXEC('$($m.Groups[1].Value -replace "'","''")');`nEND;"}
+$sbAlter = {param ($m) "BEGIN`nEXEC('$($m.Groups[1].Value -replace "'","''")');`nEND;" }
+
+## Replace CREATE statements ( SP, View, Func )
+$sql = [regex]::replace($sql, "BEGIN\s+(CREATE (?:PROCEDURE|VIEW|FUNCTION).+?)END;", $sbCreate, "ignorecase,singleline")
+
+## Replace ALTER statements ( SP, View, Func )
+$sql = [regex]::replace($sql, "BEGIN\s+(ALTER (?:PROCEDURE|VIEW|FUNCTION).+?)END;", $sbAlter, "ignorecase,singleline")
+
 ## Export formatted SQL script
 $sql > $path
