@@ -9,6 +9,8 @@ It will encapsulate all CREATE and ALTER statements for Stored Procedures, Views
 
 #### Variables defined in the Azure DevOps CI pipeline
 
-$env:sql_script_path:    path to the exported SQL file during the Build pipeline
-$env:dev_db_name:        database name in DEV (local) environment
-$env:stage_db_name       database name in the current stage environment (staging, production)
+`$env:sql_script_path`:    path to the exported SQL file during the Build pipeline
+
+`$env:dev_db_name`:        database name in DEV (local) environment
+
+`$env:stage_db_name`:      database name in the current stage environment (staging, production)
